@@ -2,13 +2,13 @@ import boto3
 import logging
 import os
 from datetime import datetime
+from botocore.vendored import requests
 
 logging.basicConfig(format="%(asctime)s %(name)s %(levelname)-10s %(message)s")
 LOG = logging.getLogger("handler.py")
 LOG.setLevel(os.environ.get("LOG_LEVEL", logging.DEBUG))
-import requests
 
-
+api_key = os.environ['api_key']
 now_str = str(datetime.today()).replace(' ', ',')
 
 def lambda_handler(event, context):
@@ -38,7 +38,7 @@ def lambda_handler(event, context):
         LOG.info("""Getting news for keyword - %s"" % (latest_keyphrase)""")
 
 
-        url = (f'https://newsapi.org/v2/everything?q={latest_keyphrase}&from=2022-04-02&sortBy=popularity&apiKey={os.environ['api_key']}')
+        url = (f'https://newsapi.org/v2/everything?q={latest_keyphrase}&from=2022-04-02&sortBy=popularity&apiKey={api_key}')
 
         response = requests.get(url)
 
