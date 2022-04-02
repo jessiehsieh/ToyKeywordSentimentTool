@@ -2,7 +2,7 @@ import boto3
 import logging
 import os
 from datetime import datetime
-from botocore.vendored import requests
+import urllib3
 
 logging.basicConfig(format="%(asctime)s %(name)s %(levelname)-10s %(message)s")
 LOG = logging.getLogger("handler.py")
@@ -10,6 +10,7 @@ LOG.setLevel(os.environ.get("LOG_LEVEL", logging.DEBUG))
 
 api_key = os.environ['api_key']
 time_now = datetime.now()
+
 
 
 def lambda_handler(event, context):
@@ -31,11 +32,11 @@ def lambda_handler(event, context):
         return response
 
     elif event_name == 'MODIFY': 
-	key_before = event['Records'][0]['dynamodb']['OldImage']
+        key_before = event['Records'][0]['dynamodb']['OldImage']
         LOG.info(key_before)
-	old_date_str = key_before['date']['S']
+        old_date_str = key_before['date']['S']
         old_datetime = datetime.strptime(old_date_str, "%Y-%m-%d")
-	if (time_now - old_datetime).day < 3:
+        if (time_now - old_datetime).days < 3:
             response = "Keyword Analysis updated recently"
             LOG.info(response)
             return response
@@ -43,9 +44,10 @@ def lambda_handler(event, context):
     else:
         key_after = event['Records'][0]['dynamodb']['NewImage']
         keyphrase = key_after['keyphrase']['S']
-
-        url = (f'https://newsapi.org/v2/everything?q={latest_keyphrase}&from=2022-04-02&sortBy=popularity&apiKey={api_key}')
-        response = requests.get(url)
-        print(response.json)
+        
+        http = urllib3.PoolManager()
+        r = http.request('GET', f'https://newsapi.org/v2/everything?q={keyphrase}&from=2022-04-02&sortBy=popularity&apiKey={api_key}')
+        
+        print(r.data)
         return "response returned"
    
