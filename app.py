@@ -25,4 +25,4 @@ def submit():
         return 'Incorrect input for key phrase!'
  
 if __name__ == "__main__":
-    app.run(port=8888, debug=True)
+    app.run(port=8080, debug=True)
