@@ -41,7 +41,6 @@ def lambda_handler(event, context):
             LOG.info(response)
             return response
 
-    else:
         key_after = event['Records'][0]['dynamodb']['NewImage']
         keyphrase = key_after['keyphrase']['S']
         
