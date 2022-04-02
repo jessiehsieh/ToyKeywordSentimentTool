@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Sample web form</title>
+    </head>
+<body>
+
+<h3>Welcome to Keyword Sentiment Analyzer</h3>
+<h1>Please fill in the form below to get an analysic. </h1>
+
+<form class="col s12" id="offer_entry" action="{{ url_for('submit') }}" method="post">
+	<div class="row">
+		<div class="input-field col s12">
+			<label for="cust_key">Give a Keyword / Phrase:</label>
+			<textarea id="cust_key" name="keyphrase" class="materialize-textarea" class="validate"></textarea>
+		</div>
+	</div>
+	<div>
+		<button class="waves-effect waves-light btn submitbtn" type="submit">Submit</button>
+	</div>
+</form>
+
+</body>
+</html>
